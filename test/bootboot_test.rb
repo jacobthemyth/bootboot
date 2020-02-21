@@ -16,19 +16,6 @@ class BootbootTest < Minitest::Test
     end
   end
 
-  def test_does_not_sync_the_gemfile_next_lock_when_nothing_changed
-    write_gemfile do |file, _dir|
-      FileUtils.cp("#{file.path}.lock", gemfile_next(file))
-      File.write(file, 'gem "warning"', mode: 'a')
-
-      output = run_bundler_command('bundle install', file.path)
-      assert_match("Updating the #{file.path}_next.lock", output)
-
-      output = run_bundler_command('bundle install', file.path)
-      refute_match("Updating the #{file.path}_next.lock", output)
-    end
-  end
-
   def test_sync_the_gemfile_next_after_installation_of_new_gem
     write_gemfile do |file, _dir|
       FileUtils.cp("#{file.path}.lock", gemfile_next(file))

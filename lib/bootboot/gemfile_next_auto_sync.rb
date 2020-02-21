@@ -23,24 +23,13 @@ module Bootboot
     end
 
     def opt_in
-      self.class.hook('before-install-all') do
-        @previous_lock = Bundler.default_lockfile.read
-      end
-
       self.class.hook("after-install-all") do
-        current_definition = Bundler.definition
-
         next if !GEMFILE_NEXT_LOCK.exist? ||
-                nothing_changed?(current_definition) ||
                 ENV[Bootboot.env_next] ||
                 ENV[Bootboot.env_previous]
 
-        update!(current_definition)
+        update!(Bundler.definition)
       end
-    end
-
-    def nothing_changed?(current_definition)
-      current_definition.to_lock == @previous_lock
     end
 
     def update!(current_definition)
