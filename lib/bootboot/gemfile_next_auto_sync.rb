@@ -11,7 +11,7 @@ module Bootboot
 
     def check_bundler_version
       self.class.hook("before-install-all") do
-        next if Bundler::VERSION >= "1.17.0" || !GEMFILE_NEXT_LOCK.exist?
+        next if Bundler::VERSION >= "1.17.0" || !Bootboot::Lockfile.next.exist?
 
         Bundler.ui.warn(<<-EOM.gsub(/\s+/, " "))
           Bootboot can't automatically update the Gemfile_next.lock because you are running
@@ -30,7 +30,7 @@ module Bootboot
       self.class.hook("after-install-all") do
         current_definition = Bundler.definition
 
-        next if !GEMFILE_NEXT_LOCK.exist? ||
+        next if !Bootboot::Lockfile.next.exist? ||
                 nothing_changed?(current_definition) ||
                 ENV[Bootboot.env_next] ||
                 ENV[Bootboot.env_previous]
@@ -52,7 +52,7 @@ module Bootboot
       ENV['BOOTBOOT_UPDATING_ALTERNATE_LOCKFILE'] = '1'
 
       unlock = current_definition.instance_variable_get(:@unlock)
-      definition = Bundler::Definition.build(GEMFILE, lock, unlock)
+      definition = Bundler::Definition.build(Bundler.default_gemfile, lock, unlock)
       definition.resolve_remotely!
       definition.lock(lock)
     ensure
@@ -70,9 +70,9 @@ module Bootboot
 
     def which_lock
       if Bundler.default_lockfile.to_s =~ /_next\.lock/
-        GEMFILE_LOCK
+        Bootboot::Lockfile.original
       else
-        GEMFILE_NEXT_LOCK
+        Bootboot::Lockfile.next
       end
     end
   end

@@ -7,7 +7,7 @@ module DefinitionPatch
     lockfile = if ENV['BOOTBOOT_UPDATING_ALTERNATE_LOCKFILE']
       wrong_lock
     else
-      Bootboot::GEMFILE_NEXT_LOCK
+      Bootboot::Lockfile.next
     end
 
     super(lockfile, *args)
@@ -21,7 +21,7 @@ module RubyVersionPatch
       # the Gemfile is different from the Ruby version currently running, we
       # want to write the version specified in `Gemfile` for the current
       # dependency set to the lock file
-      Bundler::Definition.build(Bootboot::GEMFILE, nil, false).ruby_version || super
+      Bundler::Definition.build(Bundler.default_gemfile, nil, false).ruby_version || super
     else
       super
     end
@@ -41,7 +41,7 @@ end
 
 module SharedHelpersPatch
   def default_lockfile
-    Bootboot::GEMFILE_NEXT_LOCK
+    Bootboot::Lockfile.from_original(super)
   end
 end
 

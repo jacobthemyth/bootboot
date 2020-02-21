@@ -252,11 +252,31 @@ class BootbootTest < Minitest::Test
       EOM
 
       error = assert_raises BundleInstallError do
-        run_bundler_command('bundle install', file.path, env: { Bootboot.env_next => '1' })
+        run_bundler_command('bundle install', file.path, env: { "DEPENDENCIES_NEXT" => "1" })
       end
 
       assert_match("Your Ruby version is #{RUBY_VERSION}, but your Gemfile specified 9.9.9", error.message)
     end
+  end
+
+  def test_changing_directory_changes_lockfile_when_dual_booting
+    # fork to avoid mangling other tests
+    pid = fork do
+      # Install bootboot patches
+      Bundler::Dsl.new.enable_dual_booting
+
+      bootboot_lockfile_next = Bundler.root.join("Gemfile_next.lock")
+      assert_equal bootboot_lockfile_next, Bundler.default_lockfile
+
+      write_gemfile do |_file, dir|
+        Dir.chdir(dir) do
+          tmp_lockfile_next = Pathname.new(dir).join("Gemfile_next.lock")
+          assert_equal tmp_lockfile_next, Bundler.default_lockfile
+        end
+      end
+    end
+
+    Process.wait pid
   end
 
   private
