@@ -25,6 +25,7 @@ module Bootboot
     def opt_in
       self.class.hook("after-install-all") do
         next if !GEMFILE_NEXT_LOCK.exist? ||
+                Bundler.frozen_bundle? ||
                 ENV[Bootboot.env_next] ||
                 ENV[Bootboot.env_previous]
 
