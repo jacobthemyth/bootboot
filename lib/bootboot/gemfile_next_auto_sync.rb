@@ -41,7 +41,7 @@ module Bootboot
       ENV[env] = '1'
       ENV['BOOTBOOT_UPDATING_ALTERNATE_LOCKFILE'] = '1'
 
-      unlock = original_unlock(current_definition)
+      unlock = DefinitionHelpers.original_unlock(current_definition)
       definition = Bundler::Definition.build(GEMFILE, lock, unlock)
       definition.resolve_remotely!
       definition.lock(lock)
@@ -63,21 +63,6 @@ module Bootboot
         GEMFILE_LOCK
       else
         GEMFILE_NEXT_LOCK
-      end
-    end
-
-    # Bundler doesn't directly save the value of unlock passed to
-    # Definition#initialize to @unlock, but rather stores a hash in @unlock
-    # even if the value passed to Definition#ininialize is true, false, or nil.
-    # This method infers the original unlock argument. This is tightly coupled
-    # to the internals of Bundler since it's not guaranteed that
-    # @unlocking_bundler will always correspond to the type of unlock
-    def original_unlock(definition)
-      unlocking_bundler = definition.instance_variable_get(:@unlocking_bundler)
-      if unlocking_bundler == false
-        definition.instance_variable_get(:@unlocking)
-      else
-        unlocking_bundler
       end
     end
   end

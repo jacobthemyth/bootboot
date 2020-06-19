@@ -4,10 +4,13 @@ $LOAD_PATH.unshift(File.expand_path("../../lib", __FILE__))
 require "bootboot"
 
 require "minitest/autorun"
+require "minitest/hell"
 require "open3"
 require "tempfile"
 
 class BootbootTestCase < Minitest::Test
+  parallelize_me!
+
   private
 
   def plugin

@@ -10,6 +10,7 @@ module Bootboot
 
   autoload :GemfileNextAutoSync, 'bootboot/gemfile_next_auto_sync'
   autoload :Command,             'bootboot/command'
+  autoload :DefinitionHelpers,   'bootboot/definition_helpers'
 
   class << self
     def env_next
