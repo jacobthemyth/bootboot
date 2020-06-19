@@ -14,6 +14,25 @@ module DefinitionPatch
   end
 end
 
+# This needs some conditional on an option or something, we definitely don't
+# want to always unfreeze, just when used with --deployment and maybe an env
+# var
+module PluginDSLPatch
+  def to_definition(*)
+    Bundler.settings.temporary(deployment: false, frozen: false) do
+      super
+    end
+  end
+end
+
+module PluginInstallerPatch
+  def install_definition(*)
+    Bundler.settings.temporary(deployment: false, frozen: false) do
+      super
+    end
+  end
+end
+
 module RubyVersionPatch
   def system
     if ENV['BOOTBOOT_UPDATING_ALTERNATE_LOCKFILE']
@@ -44,6 +63,9 @@ module SharedHelpersPatch
     Bootboot::GEMFILE_NEXT_LOCK
   end
 end
+
+Bundler::Plugin::DSL.prepend(PluginDSLPatch)
+Bundler::Plugin::Installer.prepend(PluginInstallerPatch)
 
 Bundler::Definition.prepend(DefinitionSourceRequirementsPatch)
 Bundler::RubyVersion.singleton_class.prepend(RubyVersionPatch)

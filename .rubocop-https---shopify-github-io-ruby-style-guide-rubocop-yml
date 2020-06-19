@@ -4,6 +4,9 @@ AllCops:
   DisabledByDefault: true
   StyleGuideBaseURL: https://shopify.github.io/ruby-style-guide/
 
+Lint/AssignmentInCondition:
+  Enabled: true
+
 Layout/AccessModifierIndentation:
   EnforcedStyle: indent
   SupportedStyles:
@@ -72,13 +75,6 @@ Style/BlockDelimiters:
   - lambda
   - proc
   - it
-
-Style/BracesAroundHashParameters:
-  EnforcedStyle: no_braces
-  SupportedStyles:
-  - braces
-  - no_braces
-  - context_dependent
 
 Layout/CaseIndentation:
   EnforcedStyle: end
@@ -169,7 +165,7 @@ Naming/FileName:
   Regex:
   IgnoreExecutableScripts: true
 
-Layout/FirstParameterIndentation:
+Layout/FirstArgumentIndentation:
   EnforcedStyle: consistent
   SupportedStyles:
   - consistent
@@ -257,6 +253,19 @@ Style/Next:
 Style/NonNilCheck:
   IncludeSemanticChanges: false
 
+Style/MethodCallWithArgsParentheses:
+  Enabled: true
+  IgnoreMacros: true
+  IgnoredMethods:
+  - require
+  - require_relative
+  - require_dependency
+  - yield
+  - raise
+  - puts
+  Exclude:
+  - Gemfile
+
 Style/MethodDefParentheses:
   EnforcedStyle: require_parentheses
   SupportedStyles:
@@ -314,18 +323,6 @@ Style/NumericLiteralPrefix:
 
 Style/ParenthesesAroundCondition:
   AllowSafeAssignment: true
-
-Style/PercentLiteralDelimiters:
-  PreferredDelimiters:
-    '%': '()'
-    '%i': '()'
-    '%q': '()'
-    '%Q': '()'
-    '%r': '{}'
-    '%s': '()'
-    '%w': '()'
-    '%W': '()'
-    '%x': '()'
 
 Style/PercentQLiterals:
   EnforcedStyle: lower_case_q
@@ -502,14 +499,6 @@ Naming/VariableName:
 Style/WhileUntilModifier:
   Enabled: true
 
-Style/WordArray:
-  EnforcedStyle: percent
-  SupportedStyles:
-  - percent
-  - brackets
-  MinSize: 0
-  WordRegex: !ruby/regexp /\A[\p{Word}\n\t]+\z/
-
 Metrics/BlockNesting:
   Max: 3
 
@@ -588,6 +577,7 @@ Layout/BlockEndNewline:
 
 Style/CaseEquality:
   Enabled: true
+  AllowOnConstant: true
 
 Style/CharacterLiteral:
   Enabled: true
@@ -670,6 +660,9 @@ Style/IfWithSemicolon:
 Style/IdenticalConditionalBranches:
   Enabled: true
 
+Layout/IndentationStyle:
+  Enabled: true
+
 Style/InfiniteLoop:
   Enabled: true
 
@@ -686,9 +679,6 @@ Style/MethodMissingSuper:
   Enabled: true
 
 Style/MissingRespondToMissing:
-  Enabled: true
-
-Style/MultilineBlockChain:
   Enabled: true
 
 Layout/MultilineBlockLayout:
@@ -757,10 +747,16 @@ Style/RedundantParentheses:
 Style/RedundantSelf:
   Enabled: true
 
+Style/RedundantSortBy:
+  Enabled: true
+
 Layout/RescueEnsureAlignment:
   Enabled: true
 
 Style/RescueModifier:
+  Enabled: true
+
+Style/Sample:
   Enabled: true
 
 Style/SelfAssignment:
@@ -811,9 +807,6 @@ Layout/SpaceInsideRangeLiteral:
 Style/SymbolLiteral:
   Enabled: true
 
-Layout/Tab:
-  Enabled: true
-
 Layout/TrailingWhitespace:
   Enabled: true
 
@@ -839,6 +832,9 @@ Style/WhileUntilDo:
   Enabled: true
 
 Style/ZeroLengthPredicate:
+  Enabled: true
+
+Layout/HeredocIndentation:
   Enabled: true
 
 Lint/AmbiguousOperator:
@@ -877,9 +873,6 @@ Lint/EmptyEnsure:
 Lint/EmptyInterpolation:
   Enabled: true
 
-Lint/EndInMethod:
-  Enabled: true
-
 Lint/EnsureReturn:
   Enabled: true
 
@@ -890,7 +883,7 @@ Lint/FormatParameterMismatch:
   Enabled: true
 
 Lint/SuppressedException:
-  Enabled: true
+  AllowComments: true
 
 Lint/ImplicitStringConcatenation:
   Description: Checks for adjacent string literals on the same line, which could
@@ -984,12 +977,6 @@ Lint/UselessSetterCall:
 Lint/Void:
   Enabled: true
 
-Style/RedundantSortBy:
-  Enabled: true
-
-Style/Sample:
-  Enabled: true
-
 Security/Eval:
   Enabled: true
 
@@ -1000,6 +987,9 @@ Security/Open:
   Enabled: true
 
 Lint/BigDecimalNew:
+  Enabled: true
+
+Style/Strip:
   Enabled: true
 
 Style/TrailingBodyOnClass:
@@ -1025,4 +1015,7 @@ Style/ModuleFunction:
   EnforcedStyle: extend_self
 
 Lint/OrderedMagicComments:
+  Enabled: true
+
+Lint/DeprecatedOpenSSLConstant:
   Enabled: true
